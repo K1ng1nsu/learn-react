@@ -66,7 +66,7 @@ const App = () => {
                   "Authorization": "Bearer "
                 },
               });
-              console.log("서버 응답: ", response.data);
+              console.log("서버 응답: ", response.data);                                                                                                                                                                              
               toggleModal();
             } catch (error) {
               console.error("파일 업로드 오류", error);
