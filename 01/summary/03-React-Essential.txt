@@ -1,0 +1,25 @@
+목표 
+- Building UI with Components
+- Using, Sharing & Outputting Data(static, dynamic & conditional)
+- Handling User Events
+- Building Interative UIs with State
+
+핵심 키워드
+- Component
+- JSX (JavaSript Syntax eXtension)
+- Props
+- State
+- Hooks
+
+### Component adv.
+- 하나의 컴포넌트를 재사용 -> 적은코드, 디버깅, 유지보수가 쉬움
+- HTML & JS code가 한 파일에 작성되기 때문에 디버깅, 유지보수가 쉬움
+- 다른 컴포넌트와는 분리되어 있기 때문에 -> 디버깅, 유지보수가 쉬움, 하나에만 집중 가능
+
+### Component Functions 조건
+- 함수명 대문자자로 시작 
+- renderable content(JSX)를 리턴
+
+### Rules of Hooks
+- 함수 컴포넌트 안에서만 호출 가능 (custom-hook 가능)
+- 탑 레벨에서만 호출 가능(조건문 등 안에 불가능)

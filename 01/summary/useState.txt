@@ -1,0 +1,9 @@
+### useState
+- 배열 리턴 => [<current-state-value>, <state-updating-function>] = useState(<initial-value>)
+- 상태를 저장
+- 상태가 바뀌면 컴포넌트 리렌더링
+- setter 함수는 비동기적임 -> 컴포넌트가 다시 실행될 때 상태가 바뀐게 들어옴옴
+
+const [selectedButton, setSelectedButton] = useState('components');
+
+setSelectedButton('JSX') => 비동기 코드 
