@@ -1,0 +1,105 @@
+@ JSX 코드의 이면을 살펴보고, 재사용성과 유지보수에 용이한 컴포넌트를 만드는 법들
+
+### jsx의 변환 과정 => react-element
+
+<div id="content">
+    <p>Hello World!<p>
+</div>
+
+React.createElement(
+    'div', // Component Type
+    {id: 'content'}, // Props Object
+    React.createElement( // Child Component
+        'p',
+        null,
+        'Hello World'
+    )
+);
+
+
+### 컴포넌트를 분리해야 할 때
+    - 상태가 변함으로서 불필요한 렌더링이 일어날 때 => 상태를 가져야 하는 부분을 나눔
+    - 기능 별로 나눔 -> 단일 기능만을 가지게 함(상태를 가지고있든 없든)
+
+
+### Additional Key Component & Props Concepts
+    - 재사용성과 유지보수 용이성 향상에 중요
+
+## Forwared Props
+    - Wrapper Component => section 안에 다른것들 넣고 Section이라는 컴포넌트로 내보내는 
+    - html태그에 들어가야 하는 id, className, onClick 등을 다음과 같이 하면 재사용성, 유지보수에 유리하다.
+
+export default function Section({ title, children, ...props }) {
+    return (
+        <section {...props}>  // id='examples' className='something'
+
+
+## Mulitiple Component Slots
+    - children 같은 jsx코드를 prop으로 내려주는 것
+
+export default function Tabs({ children, buttons }) {
+    return (
+        <>
+            <menu>{buttons}</menu>
+            {children}
+        </>
+
+
+
+## Element Indentifiers(태그식별자 => menu, div, Section, CustomWrapperComponent) as Props
+    - 동적으로 묶고 있는 태그를 변경 가능
+    - 기본 내장 => 문자
+    - 커스텀 => 컴포넌트 포인터
+
+            <Tabs
+                buttonsContainer="menu"
+                // buttonsContainer="div"
+                // buttonsContainer={Section}
+
+export default function Tabs({ children, buttons, buttonsContainer }) {
+    const ButtonContainer = buttonsContainer;
+    // buttonsContainer가 아닌 ButtonContainer로(prop명) 받으면 선언없이 바로 적용가능
+    return (
+        <>
+            <ButtonContainer>{buttons}</ButtonContainer>
+            {children}
+        </>
+    );
+}
+
+
+
+## Default Prop Values
+    - 그냥 es6 문법 활용
+
+export default function Tabs({ children, buttons, buttonsContainer="menu" }) {
+    const ButtonContainer = buttonsContainer;
+    return (
+        <>
+            <ButtonContainer>{buttons}</ButtonContainer>
+            {children}
+        </>
+    );
+}
+
+
+
+
+
+// new project
+
+### 모든 컨텐츠가 컴포넌트에 보관될 필요는 없다.
+    - index.html에 그냥 적을 수도 있음 - 필요한 사진 등은 ~/public 폴더에  // public/game-logo.png (x 저절로 public에서 찾음) ==> game-logo.png
+    - public/에 저장된 이미지는 프로젝트 개발 서버 및 빌드 프로세스에 의해 공개적으로 제공됨
+
+
+### 상태를 끌어올리면 안되는 경우
+    - 상태가 과도하게 많은 컴포넌트를 렌더링할 때 영향을 미치는 경우
+    - 부모 컴포넌트가 불필요하게 복잡해질 때
+    - 상태가 특정 자식 컴포넌트에만 국한될 때
+    - 컨텍스트나 글로벌 상태 관리 도구가 더 적합한 경우
+    solution =>
+        1. 그냥 부모 컴포넌트에 상태를 하나 더 만든다.
+        2. Context(글로벌 상태 관리)
+        3. 상태 관리 라이브러리
+        4.
