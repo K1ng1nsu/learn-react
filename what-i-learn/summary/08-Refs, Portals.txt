@@ -1,0 +1,80 @@
+목표 - Advanced DOM Access & Value Management
+- Accessing DOM Elements with Refs
+- Managing Values with Refs
+- Exposing API Functions from Components
+- Detaching DOM Rendering from JSX Structure with Portals
+
+핵심 키워드
+- Refs
+- Portals
+- Management of DOM Elements
+
+
+### What is Ref
+const playerName = useRef();
+
+useRef 는 항상 current 속성을 가지고 있는 객체를 리턴한다.
+연결한 DOM(html 엘리먼트에 ref 속성으로 연결)에 current 속성으로 접근할 수 있다.
+
+<input ref={playerName} type="text" />
+
+playerName.current // input element
+
+### When use Refs
+
+-DOM 요소에 접근: 특정 DOM 요소에 직접 접근할 필요가 있을 때.
+-값을 저장: 컴포넌트가 리렌더링되어도 값이 유지되어야 할 때.
+-렌더링 사이드 이펙트 방지: 불필요한 리렌더링 없이 값을 참조해야 할 때.
+-포커스 관리: 입력 필드에 포커스를 설정하거나 관리할 때.
+
+# 직접 돔을 조작하면 명령적으로 코드를 작성하게 되는데, 이는 리액트가 돔을 조작해야한다는
+철학에 부합하지 않는다
+
+# State vs Refs
+State
+- 값이 바뀔 때 마다 컴포넌트를 재평가받게 함
+- UI에 직접적(바로) 반영되어야 하는 경우 사용할 것
+- UI에 직접적(바로) 반영되어야 하는 경우(behind the scenes)가 아니면 사용하지 말 것
+
+Refs
+- 값이 바뀌어도 컴포넌트가 재평가 받지 않음
+- DOM에 직접 접근해야할 때 사용할 수 있음 (돔에서 값을 읽어오거나, 브라우저 API에 접근할 때 사용하면 좋음)
+- 한 파일안 이면서, 컴포넌트 밖에 작성된 코드는 모든 인스턴스가 공유함
+- 컴포넌트의 인스턴스가 각각 가져야 하는 변수(컴포넌트가 재 평가받아도 값을 유지해야 하지만, UI에 영향을 주지않는 변수)( dom에 연결하지않은 ref의 current에 값을 저장) 
+- ref를 prop으로 전달하는건 리액트19 부터고 그 전에는 forwardRef를 통해 전달해야한다
+
+
+### forwardRef - react 19 부터는 안써도 아래로 ref 전달 가능
+const ResultModal = forwardRef(function ResultModal({ onReset, targetTime, remainingTime }, ref) {
+
+### useImperativeHandle
+- ref를 통해 상위 컴포넌트에 객체를 전달할 수 있음
+- 
+- useImperativeHandle(ref, () => { // 객체를 리턴하는 함수 상위컴포넌트의 ref.current에 연결됨
+    return  {
+        open() {
+            // 이 방법으로 상위 컴포넌트에 함수나 변수 등을 전달한다면
+            // 누군가 이 컴포넌트를 변경하려고 할 때 이런 것들을 전달해야함을 알고 crash가 일어나지 않게 할 수있음
+        }
+    }
+})
+
+### Portals
+
+    return createPortal(
+        <dialog ref={dialog} className="result-modal" onClose={onReset}>
+            {userLost && <h2>You lost</h2>}
+            {!userLost && <h2>Your Score: {score} </h2>}
+            <p>
+                The target time was <strong>{targetTime} seconds.</strong>
+            </p>
+            <p>
+                You stopped the timer with <strong>{formattedRemainingTime} seconds left</strong>
+            </p>
+            <form method="dialog" onSubmit={onReset}>
+                <button>close</button>
+            </form>
+        </dialog>,
+        document.getElementById('modal')
+    );
+});
